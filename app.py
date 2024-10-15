@@ -1,7 +1,6 @@
 import streamlit as st
 import math
 import numpy as np
-import matplotlib.pyplot as plt
 
 # Function to perform scientific operations
 def scientific_calculator():
@@ -16,7 +15,7 @@ def scientific_calculator():
         num1 = st.number_input("Enter first number", format="%f")
         num2 = st.number_input("Enter second number", format="%f")
 
-        if st.button("Calculate", key='basic', type='primary', use_container_width=False, help="Perform the basic operation"):
+        if st.button("Calculate", key='basic', use_container_width=False, help="Perform the basic operation"):
             if operation == "Add":
                 result = num1 + num2
                 st.success(f"{num1} + {num2} = {result}")
@@ -42,7 +41,7 @@ def scientific_calculator():
         if operation in ["Square Root", "Logarithm", "Sine", "Cosine", "Tangent"]:
             num = st.number_input("Enter the number", format="%f")
 
-            if st.button("Calculate", key='scientific', type='primary'):
+            if st.button("Calculate", key='scientific'):
                 if operation == "Square Root":
                     result = math.sqrt(num)
                     st.success(f"√{num} = {result}")
@@ -67,7 +66,7 @@ def scientific_calculator():
             base = st.number_input("Enter the base", format="%f")
             exponent = st.number_input("Enter the exponent", format="%f")
 
-            if st.button("Calculate", key='power', type='primary'):
+            if st.button("Calculate", key='power'):
                 result = math.pow(base, exponent)
                 st.success(f"{base}^{exponent} = {result}")
 
@@ -85,26 +84,18 @@ def scientific_calculator():
         # Generate x values
         x = np.linspace(x_min, x_max, 400)
 
-        if st.button("Plot Graph", key='graph', type='primary'):
-            plt.figure(figsize=(10, 5))
-            
+        if st.button("Plot Graph", key='graph'):
             if graph_type == "Sine":
                 y = np.sin(x)
-                plt.plot(x, y, label="sin(x)")
             elif graph_type == "Cosine":
                 y = np.cos(x)
-                plt.plot(x, y, label="cos(x)")
             elif graph_type == "Tangent":
                 y = np.tan(x)
-                plt.plot(x, y, label="tan(x)")
-                plt.ylim(-10, 10)  # Limit y values for tangent to avoid infinity jumps
+                y = np.clip(y, -10, 10)  # Limit y values for tangent to avoid infinity jumps
 
-            plt.title(f"{graph_type} Function")
-            plt.xlabel("x values")
-            plt.ylabel(f"{graph_type}(x)")
-            plt.legend()
-
-            st.pyplot(plt)
+            # Plot graph using Streamlit's line_chart
+            chart_data = {"x": x, "y": y}
+            st.line_chart(chart_data)
 
 # Run the scientific calculator
 if __name__ == '__main__':
